@@ -1,0 +1,16 @@
+{
+    "azureManagedImagePrefix": "app-vm-image-",
+    "azureManagedImageResourceGroup": "images-rg",
+    "azureServiceConnection": "Azure Service Connection",
+    "azureSharedImageDefinitionName": "app-images",
+    "azureSharedImageGalleryName": "appsharedimagegallery",
+    "azureSharedImageGalleryResourceGroup": "app-images",
+    "azureSharedImageTargetRegions": "southeastasia=1=standard_lrs",
+    "azureTerraformResourceGroup": "terraform-rg",
+    "azureTerraformStorageAccount": "terraformstorage",
+    "azureVhdDiskLocation": "southeastasia",
+    "azureVhdDiskPrefix": "app-vm-vhd-",
+    "azureVhdDiskResourceGroup": "images-rg",
+    "azureVhdStorageAccount": "vhdstorage",
+    "azureVhdStorageContainer": "images-vhds"
+}
