@@ -6,7 +6,7 @@ pool:
 variables:
   - group: 'Azure Resources'
   - name: solution
-    value: 'application/AspNetCoreWebApp/*.sln'
+    value: 'VM Offer Pipeline/application/AspNetCoreWebApp/*.sln'
   - name: buildPlatform
     value: 'Any CPU'
   - name: buildConfiguration
