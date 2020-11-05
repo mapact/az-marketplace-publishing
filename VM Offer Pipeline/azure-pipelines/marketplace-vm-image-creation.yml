@@ -6,7 +6,7 @@ pool:
 variables:
   - group: 'Azure Resources'
   - name: solution
-    value: 'AspNetCoreWebAppSample/*.sln'
+    value: 'application/AspNetCoreWebApp/*.sln'
   - name: buildPlatform
     value: 'Any CPU'
   - name: buildConfiguration
@@ -30,7 +30,7 @@ stages:
           /p:WebPublishMethod=Package 
           /p:PackageAsSingleFile=true 
           /p:SkipInvalidConfigurations=true 
-          /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\AspNetCoreWebAppSample.zip" 
+          /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\AspNetCoreWebApp.zip" 
           /p:DeployIisAppPath="Default Web Site"'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
@@ -207,7 +207,7 @@ stages:
         UserPassword: '$(windowsVmPassword)'
         InlineScript: |
           Stop-WebAppPool -Name 'DefaultAppPool'
-          C:/drop/AspNetCoreWebAppSample.deploy.cmd /Y
+          C:/drop/AspNetCoreWebApp.deploy.cmd /Y
           Start-WebAppPool -Name 'DefaultAppPool'
           Start-Process -FilePath C:/Windows/System32/Sysprep/Sysprep.exe -ArgumentList '/generalize /oobe /quit /quiet'  -Wait 
         NewPsSessionOptionArguments: '-SkipCACheck -SkipCNCheck -SkipRevocationCheck -IdleTimeout 7200000 -OperationTimeout 0 -OutputBufferingMode Block'
