@@ -10,10 +10,6 @@ output "resource_group_name" {
   value = azurerm_resource_group.group.name
 }
 
-output "diagnostics_storage_account_endpoint" {
-  value = azurerm_storage_account.diagnostics.primary_blob_endpoint
-}
-
 output "app_subnet_id" {
   value = azurerm_subnet.app_subnet.id
 }

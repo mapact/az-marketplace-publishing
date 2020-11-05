@@ -35,11 +35,6 @@ variable "app_subnet_prefix" {
   default     = "192.168.0.64/28"
 }
 
-variable "diag_storage_prefix" {
-  description = "The storage account prefix for diagnostics collection."
-  default     = "demodiag"
-}
-
 variable "app_subnet_nsg_name" {
   description = "The name of the NSG for the Application subnet."
   default     = "app-subnet-nsg"
