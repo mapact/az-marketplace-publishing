@@ -328,7 +328,7 @@ stages:
 
 - stage: DestroyTerraformApplication
   jobs:
-  - job: CreateAppResourcesWithTerraform
+  - job: DestroyAppResourcesWithTerraform
     steps:
     - task: DownloadSecureFile@1
       displayName: Download Application tfvars file from Secure Library
