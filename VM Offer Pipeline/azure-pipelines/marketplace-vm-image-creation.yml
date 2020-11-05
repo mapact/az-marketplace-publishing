@@ -67,7 +67,7 @@ stages:
       displayName: Rename foundation-terraform.tfvars to terraform.tfvars
       inputs:
         Command: 'rename'
-        SourceFile: 'terraform/foundation/foundation-terraform.tfvars'
+        SourceFile: 'VM Offer Pipeline/terraform/foundation/foundation-terraform.tfvars'
         NewName: 'terraform.tfvars'
     
     - task: TerraformInstaller@0
@@ -124,7 +124,7 @@ stages:
       displayName: Rename application-terraform.tfvars to terraform.tfvars
       inputs:
         Command: 'rename'
-        SourceFile: 'terraform/application/application-terraform.tfvars'
+        SourceFile: 'VM Offer Pipeline/terraform/application/application-terraform.tfvars'
         NewName: 'terraform.tfvars'
     
     - task: TerraformInstaller@0
@@ -347,7 +347,7 @@ stages:
       displayName: Rename application-terraform.tfvars to terraform.tfvars
       inputs:
         Command: 'rename'
-        SourceFile: 'terraform/application/application-terraform.tfvars'
+        SourceFile: 'VM Offer Pipeline/terraform/application/application-terraform.tfvars'
         NewName: 'terraform.tfvars'
     
     - task: TerraformInstaller@0
