@@ -1,0 +1,598 @@
+{
+	"info": {
+		"name": "Azure Marketplace SaaS API v2",
+		"description": "\r\n#Variables\r\n- ApiVersion - Determines whether the production or mock API instance is in use. Set to \"2018-09-15\" for mock version and \"2018-08-31\" for production version.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Azure AD app token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{ClientId}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{ClientSecret}}",
+							"type": "text"
+						},
+						{
+							"key": "resource",
+							"value": "20e940b3-4c77-4b0b-9a53-9e16a1b010a7",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{{TenantId}}/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"{{TenantId}}",
+						"oauth2",
+						"token"
+					]
+				},
+				"description": "Once you have registered your application, you can programmatically request an Azure AD security token. The publisher is expected to use this token, and make a request to resolve it. When using the various Fulfillment APIs, the token query parameter is in the URL when the user is redirected to SaaS website from Azure. This token is only valid for one hour. Additionally, you should URL decode the token value from the browser before using it.\r\n\r\nSource: https://docs.microsoft.com/en-us/azure/marketplace/partner-center-portal/pc-saas-registration"
+			},
+			"response": []
+		},
+		{
+			"name": "List Subscriptions",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "Bearer",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						}
+					]
+				},
+				"description": "Lists all the SaaS subscriptions for a publisher"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Subscription",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions/{{SubscriptionId}}?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions",
+						"{{SubscriptionId}}"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						}
+					]
+				},
+				"description": "Gets the specified SaaS subscription. Use this call to get license information and plan information."
+			},
+			"response": []
+		},
+		{
+			"name": "Resolve Subscriptions",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "Bearer",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "x-ms-marketplace-token",
+						"value": "{{SubscriptionId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions/resolve?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions",
+						"resolve"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						}
+					]
+				},
+				"description": "The resolve endpoint enables the publisher to resolve a marketplace token to a persistent resource ID. The resource ID is the unique identifier for a SaaS subscription. When a user is redirected to a partner's website, the URL contains a token in the query parameters. The partner is expected to use this token and make a request to resolve it. The response contains the unique SaaS subscription ID, name, offer ID, and plan for the resource. This token is valid for one hour only."
+			},
+			"response": []
+		},
+		{
+			"name": "List Available Plans",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions/{{SubscriptionId}}/listAvailablePlans?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions",
+						"{{SubscriptionId}}",
+						"listAvailablePlans"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						}
+					]
+				},
+				"description": "Use this call to find out if there are any private or public offers for the current publisher."
+			},
+			"response": []
+		},
+		{
+			"name": "Activate a Subscription",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"planId\": \"gold\",\r\n    \"quantity\": \"\"\r\n}"
+				},
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions/{{SubscriptionId}}/activate?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions",
+						"{{SubscriptionId}}",
+						"activate"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change the Plan on the Subscription",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"planId\": \"gold\"\r\n}"
+				},
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions/{{SubscriptionId}}?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions",
+						"{{SubscriptionId}}"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						}
+					]
+				},
+				"description": "Update the plan on the subscription."
+			},
+			"response": []
+		},
+		{
+			"name": "Change the quantity on the subscription",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"quantity\": 5\r\n}"
+				},
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions/{{SubscriptionId}}?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions",
+						"{{SubscriptionId}}"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						}
+					]
+				},
+				"description": "Update the quantity on the subscription."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Subscription",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions/{{SubscriptionId}}?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions",
+						"{{SubscriptionId}}"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						}
+					]
+				},
+				"description": "Unsubscribe and delete the specified subscription."
+			},
+			"response": []
+		},
+		{
+			"name": "List Outstanding Operations",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions/{{SubscriptionId}}/operations?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions",
+						"{{SubscriptionId}}",
+						"operations"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						}
+					]
+				},
+				"description": "Lists the outstanding operations for the current publisher."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Operation Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions/{{SubscriptionId}}/operations/{{OperationId}}?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions",
+						"{{SubscriptionId}}",
+						"operations",
+						"{{OperationId}}"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						}
+					]
+				},
+				"description": "Enables the publisher to track the status of the specified triggered async operation (such as Subscribe, Unsubscribe, ChangePlan, or ChangeQuantity)."
+			},
+			"response": []
+		},
+		{
+			"name": "Update the Status of an Operation",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"planId\": \"gold\",\r\n    \"quantity\": \"44\",\r\n    \"status\": \"Success\"\r\n}"
+				},
+				"url": {
+					"raw": "https://marketplaceapi.microsoft.com/api/saas/subscriptions/{{SubscriptionId}}/operations/{{OperationId}}?api-version={{ApiVersion}}",
+					"protocol": "https",
+					"host": [
+						"marketplaceapi",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"api",
+						"saas",
+						"subscriptions",
+						"{{SubscriptionId}}",
+						"operations",
+						"{{OperationId}}"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{ApiVersion}}"
+						}
+					]
+				},
+				"description": "Update the status of an operation to indicate success or failure with the provided values."
+			},
+			"response": []
+		},
+		{
+			"name": "[IN PROGRESS] Webhook Payload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"74dfb4db-c193-4891-827d-eb05fbdc64b0\",\r\n  \"activityId\": \"1897671e-2acd-4670-ba11-530e65336580\",\r\n  \"subscriptionId\": \"{{SubscriptionId}}\",\r\n  \"publisherId\": \"Fabrikam\",\r\n  \"offerId\": \"FabrikamDisasterRevovery\",\r\n  \"planId\": \"Platinum\",\r\n  \"quantity\": 50,\r\n  \"timeStamp\": \"{{$timestamp}}\",\r\n  \"action\": \"Unsubscribe\",\r\n  \"status\": \"NotStarted\"  \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://YOUR_PAYLOAD_ENDPOINT",
+					"protocol": "https",
+					"host": [
+						"YOUR_PAYLOAD_ENDPOINT"
+					]
+				},
+				"description": "Replace the HTTP endpoint with your configured webhook URL.\r\n\r\nThe sample payload is described as below:\r\n// end customer changed a quantity of purchased seats for a plan on Microsoft side\r\n{\r\n  \"id\": \"87d3a1b0-ee07-4c3d-a6dc-0a3d9d2fa33a\", // this is the operation ID to call with get operation API\r\n  \"activityId\": \"0d8d15ad-d682-4afd-8a5d-5c4cf6c4c80f\", // do not use\r\n  \"subscriptionId\": \"998729a2-1616-4d64-81ea-30a71007b3d8\", // The GUID identifier for the SaaS resource which status changes\r\n  \"publisherId\": \"contoso\", // A unique string identifier for each publisher\r\n  \"offerId\": \"offer1\", // A unique string identifier for each offer\r\n  \"planId\": \"silver\", // the most up-to-date plan ID\r\n  \"quantity\": \" 25\", // the most up-to-date number of seats, can be empty if not relevant\r\n  \"timeStamp\": \"2019-04-15T20:17:31.7350641Z\", // UTC time when the webhook was called\r\n  \"action\": \"ChangeQuantity\", // the operation the webhook notifies about\r\n  \"status\": \"Success\" // Can be either InProgress or Success  \r\n}"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ApiVersion",
+			"value": "2018-09-15",
+			"type": "string"
+		},
+		{
+			"key": "TenantId",
+			"value": "af......c795",
+			"type": "string"
+		},
+		{
+			"key": "ClientId",
+			"value": "ed......c94b",
+			"type": "string"
+		},
+		{
+			"key": "ClientSecret",
+			"value": "e-md......45G",
+			"type": "string"
+		},
+		{
+			"key": "SubscriptionId",
+			"value": "37f9dea2-4345-438f-b0bd-03d40d28c7e0",
+			"type": "string"
+		},
+		{
+			"key": "OperationId",
+			"value": "74dfb4db-c193-4891-827d-eb05fbdc64b0",
+			"type": "string"
+		}
+	]
+}
